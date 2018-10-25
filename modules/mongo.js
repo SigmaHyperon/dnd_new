@@ -1,23 +1,24 @@
 const mongoose = require('mongoose');
 
-//mongoose.connect("mongodb://localhost/inv");
+mongoose.connect("mongodb://localhost/inv");
 
 const {Schema} = mongoose;
 
 const InventorySchema = new Schema({
     id: String,
-    name: String,
-    user: String
+    name: {type: String, required: true},
+    user: {type: String, default: ''}
 });
 const ItemSchema = new Schema({
     id: String,
-    name: String,
-    amount: Number,
+    name: {type: String, required: true},
+    amount: {type: Number, default: 1},
     description: String,
     inventory: String
 });
 
 const Inventory = mongoose.model('inventory', InventorySchema);
 const Item = mongoose.model('item', ItemSchema);
+console.log(new Inventory());
 
 module.exports = {Inventory, Item};

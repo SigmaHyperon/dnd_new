@@ -1,4 +1,4 @@
-function log(message, sources){
+function log(message, sources = []){
     console.log((new Date()).toISOString()+" "+sources.map(v=>'['+v+']').join(" ")+" "+message);
 }
 function debug(debugItem, sources){
