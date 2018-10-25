@@ -1,0 +1,23 @@
+{
+  "name": "dnd_new",
+  "version": "0.0.1",
+  "description": "",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SigmaHyperon/dnd_new.git"
+  },
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/SigmaHyperon/dnd_new/issues"
+  },
+  "homepage": "https://github.com/SigmaHyperon/dnd_new#readme",
+  "dependencies": {
+    "express": "~4.16.4",
+    "mongoose": "~5.3.6",
+    "socket.io": "~2.1.1"
+  }
+}
