@@ -9,8 +9,11 @@ apiRouterV1.use(function(req, res, next){
 apiRouterV1.get(`/inv`, (req, res) => {
     res.send(`list of inventories`);
 });
-apiRouterV1.get(`/inv/:id`, (req, res) => {
-    res.send(`Inventory #${req.params.id} Overview`);
+apiRouterV1.get(`/inv/:invId`, (req, res) => {
+    res.send(`Inventory #${req.params.invId} Overview`);
+});
+apiRouterV1.get(`/inv/:invId/item`, (req, res) => {
+    res.send(`Inventory #${req.params.invId} Item Overview`);
 });
 apiRouterV1.get(`/inv/:invId/item/:itemId`, (req, res) => {
     res.send(`Inventory #${req.params.invId} Item #${req.params.itemId}`);
