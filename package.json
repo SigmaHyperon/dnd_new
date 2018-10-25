@@ -8,7 +8,9 @@
     "url": "git+https://github.com/SigmaHyperon/dnd_new.git"
   },
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "dev": "set NODE_ENV=development&& node app.js",
+    "prod": "set NODE_ENV=production&& node app.js"
   },
   "author": "",
   "bugs": {
@@ -19,6 +21,8 @@
     "express": "~4.16.4",
     "mongoose": "~5.3.6",
     "socket.io": "~2.1.1",
-    "body-parser": "~1.18.3"
+    "body-parser": "~1.18.3",
+    "config": "~2.0.1",
+    "uuid": "~3.3.2"
   }
 }
