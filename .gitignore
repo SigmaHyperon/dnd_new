@@ -1,3 +1,6 @@
 node_modules/*
 vcs.xml
 package-lock.json
+_windows
+*.xml
+codestyles
