@@ -1,0 +1,64 @@
+/***************************
+*
+*
+*
+****************************/
+
+/* Global settings*/
+:root {
+    --mainMargin: 10%;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+body {
+    font-size: 14px;
+}
+
+
+/* Layout */
+header {
+    text-align: center;
+    margin-top: var(--mainMargin);
+}
+
+.wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 1.5em var(--mainMargin);
+}
+
+main {
+    flex: 70%;
+    padding: 1.5em;
+    background-color: #eaeaea;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 4px;
+}
+
+/* Create four equal columns that sits next to each other */
+.column {
+    flex: 25%;
+    max-width: 25%;
+    padding: 0 4px;
+}
+
+aside {
+    flex: 30%;
+    background-color: #f1f1f1;
+    padding: 20px;
+}
+
+/* pls delete*/
+.fakeimg {
+    background-color: #aaa;
+    width: 100%;
+    padding: 20px;
+}
