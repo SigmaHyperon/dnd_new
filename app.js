@@ -8,4 +8,16 @@ const port = config.has('port') ? config.get('port') : 80;
 app.use(`/inv`, express.static("www"));
 app.use(`/api`, apiRouter);
 
-app.listen(port, () => {log.log(`listening on port ${port}`, ['INIT']);});
+if(config.has('disableSSL') && config.get('disableSSL')){
+    app.listen(port, () => {log.log(`listening on port ${port}`, ['INIT']);});
+} else {
+    const fs = require('fs');
+    const https = require('https');
+
+    var privateKey = fs.readFileSync('ssl/server.key');
+    var certificate = fs.readFileSync('ssl/server.crt');
+
+    var credentials = {key: privateKey, cert: certificate};
+
+    https.createServer(credentials, app).listen(port, () => {log.log(`listening on port ${port}`, ['INIT']);});
+}
