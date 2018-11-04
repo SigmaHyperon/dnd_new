@@ -1,6 +1,13 @@
 const mongoose = require('mongoose');
+const log = require('./log.js');
 
-mongoose.connect("mongodb://localhost/inv");
+mongoose.connect("mongodb://localhost/inv",{
+        useNewUrlParser: true
+    }, function(err){
+    if(err){
+        log.log("db connect failed", ['MONGO']);
+    }
+});
 
 const {Schema} = mongoose;
 
