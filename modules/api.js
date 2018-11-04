@@ -62,13 +62,13 @@ function saveErrorHandler(res){
     };
 }
 
-function applyUpdate(res){
+function applyUpdate(req, res){
     return (err, doc) => {
         if(err) return;
         for (let prop in req.body){
             if(typeof doc[prop] != 'undefined' && prop != 'id' && prop != 'salt'){
                 if(prop == 'password'){
-                    doc[prop] = sha256(req.body.prop+doc.salt);
+                    doc[prop] = sha256(req.body[prop]+doc.salt);
                 } else {
                     doc[prop] = req.body[prop];
                 }
@@ -80,8 +80,8 @@ function applyUpdate(res){
 
 function performUpdate(type){
     return (req, res, next) => {
-        if(req.method == "UPDATE"){
-            type.findOne({id: req.params.id}, applyUpdate(res));
+        if(req.method == "PATCH"){
+            type.findOne({id: req.params.id}, applyUpdate(req, res));
         } else {
             next();
         }
@@ -89,9 +89,9 @@ function performUpdate(type){
     }
 }
 
-apiRouterV1.all(`/inv/:invId`, performUpdate(Inventory));
+apiRouterV1.all(`/inv/:id`, performUpdate(Inventory));
 
-apiRouterV1.all(`/item/:itemId`, performUpdate(Item));
+apiRouterV1.all(`/item/:id`, performUpdate(Item));
 
 apiRouterV1.all(`/inv/:invId/item/:itemId`, (req, res, next) => {
     if(req.method == "UPDATE"){
@@ -101,7 +101,7 @@ apiRouterV1.all(`/inv/:invId/item/:itemId`, (req, res, next) => {
     }
 });
 
-apiRouterV1.all(`/user/:userId`, performUpdate(User));
+apiRouterV1.all(`/user/:id`, performUpdate(User));
 
 function createDocument(type){
     return (req, res) => {
@@ -118,8 +118,8 @@ apiRouterV1.put(`/user`, (req, res) => {
     var newDoc = new User();
     newDoc.id = uuid();
     Object.assign(newDoc, req.body);
-    newDoc.salt = sha256(random.int());
-    newDoc.pasword = sha256(req.body.password + newDoc.salt)
+    newDoc.salt = sha256(random.int().toString());
+    newDoc.password = sha256(req.body.password + newDoc.salt)
     newDoc.save(saveErrorHandler(res));
 });
 
