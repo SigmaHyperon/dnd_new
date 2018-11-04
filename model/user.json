@@ -1,0 +1,7 @@
+{
+    "id": "<id>",
+    "name": "testuser",
+    "password": "<salted passwordhash>",
+    "salt": "<salt>",
+    "icon": "<iconpath>"
+}

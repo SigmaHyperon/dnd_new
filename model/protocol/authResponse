@@ -1,0 +1,5 @@
+{
+    status: Succes|Error
+    message: <message>
+    token: <token>
+}
