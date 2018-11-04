@@ -3,6 +3,8 @@ const log = require('./log.js');
 const bodyParser = require('body-parser');
 const {Inventory, Item, User} = require('./mongo.js');
 const uuid = require('uuid/v4');
+const sha256 = require('js-sha256');
+const random = require('random');
 var apiRouterV1 = express.Router();
 apiRouterV1.use(bodyParser.json());
 apiRouterV1.use(function(req, res, next){
@@ -43,10 +45,10 @@ apiRouterV1.get(`/item/:itemId`, (req, res) => {
 });
 
 apiRouterV1.get(`/user`, (req, res) => {
-    User.find().lean().exec(sendResponse(res));
+    User.find({}, {password: false, salt: false}).lean().exec(sendResponse(res));
 });
 apiRouterV1.get(`/user/:userId`, (req, res) => {
-    User.findOne({id: req.params.userId}).lean().exec(sendResponse(res));
+    User.findOne({id: req.params.userId}, {password: false, salt: false}).lean().exec(sendResponse(res));
 });
 
 function saveErrorHandler(res){
@@ -64,8 +66,12 @@ function applyUpdate(res){
     return (err, doc) => {
         if(err) return;
         for (let prop in req.body){
-            if(typeof doc[prop] != 'undefined' && prop != 'id'){
-                doc[prop] = req.body[prop];
+            if(typeof doc[prop] != 'undefined' && prop != 'id' && prop != 'salt'){
+                if(prop == 'password'){
+                    doc[prop] = sha256(req.body.prop+doc.salt);
+                } else {
+                    doc[prop] = req.body[prop];
+                }
             }
         }
         doc.save(saveErrorHandler(res));
@@ -108,7 +114,14 @@ function createDocument(type){
 
 apiRouterV1.put(`/inv`, createDocument(Inventory));
 apiRouterV1.put(`/item`, createDocument(Item));
-apiRouterV1.put(`/user`, createDocument(User));
+apiRouterV1.put(`/user`, (req, res) => {
+    var newDoc = new User();
+    newDoc.id = uuid();
+    Object.assign(newDoc, req.body);
+    newDoc.salt = sha256(random.int());
+    newDoc.pasword = sha256(req.body.password + newDoc.salt)
+    newDoc.save(saveErrorHandler(res));
+});
 
 apiRouterV1.put(`/inv/:invId/item`, (req, res) => {
     Inventory.find({id: req.params.invId},(err, doc) => {

@@ -27,6 +27,8 @@ const ItemSchema = new Schema({
 const UserSchema = new Schema({
     id: String,
     name: {type: String, required: true},
+    password: String,
+    salt: String,
     icon: String
 });
 
