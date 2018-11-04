@@ -1,6 +1,6 @@
 const express = require('express');
 const log = require('./modules/log.js');
-const apiRouter = require('./modules/routes/api.js');
+const apiRouter = require('./modules/api.js');
 const config = require('config');
 var app = express();
 const port = config.has('port') ? config.get('port') : 80;

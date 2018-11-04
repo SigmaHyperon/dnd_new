@@ -1,7 +1,7 @@
 const express = require("express");
-const log = require('./../log.js');
+const log = require('./log.js');
 const bodyParser = require('body-parser');
-const {Inventory, Item, User} = require('./../mongo.js');
+const {Inventory, Item, User} = require('./mongo.js');
 const uuid = require('uuid/v4');
 var apiRouterV1 = express.Router();
 apiRouterV1.use(bodyParser.json());
