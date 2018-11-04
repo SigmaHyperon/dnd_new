@@ -12,7 +12,8 @@ app.use(`/api`, apiRouter);
 var server;
 var type = "";
 if(config.has('disableSSL') && config.get('disableSSL')){
-    server = app;
+    const http = require('http');
+    server = http.createServer(app);
     type = "http";
 } else {
     const fs = require('fs');
