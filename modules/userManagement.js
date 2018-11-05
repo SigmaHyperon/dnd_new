@@ -1,14 +1,14 @@
 const sha256 = require('js-sha256');
 const random = require('random');
-const config = require('config');
 
+const config = require('./config-default.js');
 const {User} = require('./mongo.js');
 const log = require('./log.js');
 
 class token {
     constructor() {
         this.secret = sha256((random.int()+Date.now()+random.int()).toString());
-        this.expiryDate = Date.now() + 3600000 * ((config.has('tokenTimeout')) ? config.get('tokenTimeout') : 5);
+        this.expiryDate = Date.now() + 3600000 * (config.default('tokenTimeout', 5));
     }
 }
 

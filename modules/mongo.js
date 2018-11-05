@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const log = require('./log.js');
+const config = require('./config-default.js');
 
-mongoose.connect("mongodb://localhost/inv",{
+mongoose.connect(config.default('db.url','mongodb://localhost/inv'),{
         useNewUrlParser: true
     }, function(err){
     if(err){

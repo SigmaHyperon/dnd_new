@@ -1,7 +1,8 @@
 const express = require('express');
 const log = require('./modules/log.js');
 const apiRouter = require('./modules/api.js');
-const config = require('config');
+const config = require('./modules/config-default.js');
+
 var app = express();
 const port = config.has('port') ? config.get('port') : 80;
 const socketIO = require('socket.io');
@@ -11,7 +12,7 @@ app.use(`/api`, apiRouter);
 
 var server;
 var type = "";
-if(config.has('disableSSL') && config.get('disableSSL')){
+if(config.default('disableSSL', false)){
     const http = require('http');
     server = http.createServer(app);
     type = "http";
