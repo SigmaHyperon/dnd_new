@@ -5,11 +5,49 @@ const {Inventory, Item, User} = require('./mongo.js');
 const uuid = require('uuid/v4');
 const sha256 = require('js-sha256');
 const random = require('random');
+const config = require('./config-default.js');
+
+var tokens;
+
 var apiRouterV1 = express.Router();
 apiRouterV1.use(bodyParser.json());
 apiRouterV1.use(function(req, res, next){
     log.log(`Call `+req.method+" "+req.originalUrl, ['API', 'v1']);
     next();
+});
+apiRouterV1.use(function(req, res, next){
+    //TODO: auth
+    if(config.default('api.auth', true)){
+        if(typeof req.get('x-auth') != 'undefined'){
+            let authData;
+            try{
+                authData = JSON.parse(req.get('x-auth'));
+            } catch(e){
+                res.status(400).send('auth data malformed');
+            }
+            let user = tokens[authData.user];
+            /**
+             * check for:
+             * user found?
+             * user integrity?
+             * auth match?
+             * token expired?
+             */
+            if(user){
+                if(user.token && user.token.secret && user.token.expiryDate){
+                    if(user.token.secret === authData.token && Date.now() < user.token.expiryDate){
+                        next();
+                        return;
+                    }
+                }
+            }
+            res.status(403).send('auth failed');
+        } else {
+            res.status(400).send('auth required');
+        }
+    } else {
+        next();
+    }
 });
 
 function sendResponse(res){
@@ -176,4 +214,8 @@ apiRouterV1.delete(`/user/:userId`, (req, res) => {
 var apiRouter = express.Router();
 apiRouter.use("/v1", apiRouterV1);
 
-module.exports = apiRouter;
+function setTokens(tok){
+    tokens = tok;
+}
+
+module.exports = {setTokens, apiRouter};

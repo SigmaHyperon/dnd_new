@@ -1,5 +1,8 @@
 {
     "port": 8080,
     "disableSSL": true,
-    "tokenTimeout": 5
+    "tokenTimeout": 5,
+    "api": {
+        "auth": true
+    },
 }

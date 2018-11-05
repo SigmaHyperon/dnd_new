@@ -12,6 +12,8 @@ class token {
     }
 }
 
+let sessions = [];
+
 module.exports = function(io){
     log.log("starting socketIO", ['INIT']);
     io.on('connection',function(socket){
@@ -33,7 +35,10 @@ module.exports = function(io){
                         if(sha256(authData.password+user.salt) == user.password){
                             //generate token and rend response
                             var tok = new token();
-                            //TODO: store token for auth
+                            session.auth = true;
+                            session.user = user.id;
+                            session.token = tok;
+                            sessions[session.user] = session;
                             socket.emit("authResponse", {status: 'success', token: tok});
                         } else {
                             //TODO: change message
@@ -44,14 +49,18 @@ module.exports = function(io){
             } else {
                 socket.emit("authResponse", {status: 'error', message: 'invalid auth request'});
             }
+            //console.log(sessions);
         });
         socket.on('disconnect', (err) => {
             // TODO: handle disconnect
+            //reset session
             session.auth = false;
             session.user = null;
             session.token = null;
+            //remove session from active sessions
+            sessions.splice(sessions.indexOf(session), 1);
         })
     })
     log.log("socketIO setup done", ['INIT']);
-    return io;
+    return sessions;
 }

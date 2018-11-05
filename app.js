@@ -1,6 +1,6 @@
 const express = require('express');
 const log = require('./modules/log.js');
-const apiRouter = require('./modules/api.js');
+let {setTokens, apiRouter} = require('./modules/api.js');
 const config = require('./modules/config-default.js');
 
 var app = express();
@@ -29,7 +29,8 @@ if(config.default('disableSSL', false)){
     type = "https";
 }
 
-const io = require('./modules/userManagement.js')(socketIO(server));
+const io = socketIO(server);
+setTokens(require('./modules/userManagement.js')(io));
 
 server.listen(port, () => {log.log(`${type} listening on port ${port}`, ['INIT']);});
 
