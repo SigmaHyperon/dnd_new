@@ -18,13 +18,13 @@
   },
   "homepage": "https://github.com/SigmaHyperon/dnd_new#readme",
   "dependencies": {
-    "express": "~4.16.4",
-    "mongoose": "~5.3.6",
-    "socket.io": "~2.1.1",
-    "body-parser": "~1.18.3",
-    "config": "~2.0.1",
-    "uuid": "~3.3.2",
-    "js-sha256": "~0.9.0",
-    "random": "~2.0.12"
+    "body-parser": "^1.18.3",
+    "config": "^2.0.1",
+    "express": "^4.16.4",
+    "js-sha256": "^0.9.0",
+    "mongoose": "^5.3.6",
+    "random": "^2.0.12",
+    "socket.io": "^2.1.1",
+    "uuid": "^3.3.2"
   }
 }

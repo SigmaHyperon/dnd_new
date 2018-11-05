@@ -32,3 +32,23 @@ if(config.default('disableSSL', false)){
 const io = require('./modules/userManagement.js')(socketIO(server));
 
 server.listen(port, () => {log.log(`${type} listening on port ${port}`, ['INIT']);});
+
+const exit_hook = () => {
+    console.log();
+    log.log(`server shutting down`, ['SHUTDOWN']);
+    setTimeout(()=>{
+        log.log(`server failed to shut down in a timely fashion`, ['SHUTDOWN']);
+        log.log(`process will exit now`, ['SHUTDOWN']);
+        process.exit(1);
+    }, 3000);
+    io.close(()=>{
+        log.log(`socket.io server closed`, ['SHUTDOWN']);
+        server.close(()=>{
+            log.log(`${type} server closed`, ['SHUTDOWN']);
+            log.log(`process will exit now`, ['SHUTDOWN']);
+            process.exit(0);
+        });
+    });
+};
+
+process.on('SIGINT', exit_hook);

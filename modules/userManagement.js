@@ -53,4 +53,5 @@ module.exports = function(io){
         })
     })
     log.log("socketIO setup done", ['INIT']);
+    return io;
 }
