@@ -7,6 +7,8 @@ mongoose.connect(config.default('db.url','mongodb://localhost/inv'),{
     }, function(err){
     if(err){
         log.log("db connect failed", ['MONGO']);
+    } else {
+        log.log("db connect succeeded", ['INIT', 'MONGO'])
     }
 });
 

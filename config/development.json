@@ -5,4 +5,7 @@
     "api": {
         "auth": true
     },
+    "db": {
+        "url": "mongodb://localhost/inv"
+    }
 }
