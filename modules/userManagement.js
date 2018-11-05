@@ -20,6 +20,7 @@ module.exports = function(io){
         var session = {
             auth: false,
             user: null,
+            name: null,
             token: null
         };
         socket.on('auth', function(authData){
@@ -37,12 +38,13 @@ module.exports = function(io){
                             var tok = new token();
                             session.auth = true;
                             session.user = user.id;
+                            session.name = user.name;
                             session.token = tok;
                             sessions[session.user] = session;
-                            socket.emit("authResponse", {status: 'success', token: tok});
+                            socket.emit("authResponse", {status: 'success', token: tok, userId: user.id});
+                            log.log(`user ${authData.userId} signed on successfully`, ['USMGMT']);
                         } else {
-                            //TODO: change message
-                            socket.emit("authResponse", {status: 'error', message: 'Invalid password'});
+                            socket.emit("authResponse", {status: 'error', message: 'Invalid credentials'});
                         }
                     }
                 });
