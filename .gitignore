@@ -5,3 +5,4 @@ _windows
 *.xml
 codestyles
 .idea
+ssl/*

@@ -1,0 +1,11 @@
+{
+    "port": 8080,
+    "disableSSL": true,
+    "tokenTimeout": 5,
+    "api": {
+        "auth": true
+    },
+    "db": {
+        "url": "mongodb://localhost/inv"
+    }
+}
