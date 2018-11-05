@@ -39,7 +39,7 @@ module.exports = function(io){
                             session.user = user.id;
                             session.token = tok;
                             sessions[session.user] = session;
-                            socket.emit("authResponse", {status: 'success', token: tok});
+                            socket.emit("authResponse", {status: 'success', token: tok, userId: user.id});
                         } else {
                             //TODO: change message
                             socket.emit("authResponse", {status: 'error', message: 'Invalid password'});
