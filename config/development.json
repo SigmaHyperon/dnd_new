@@ -2,6 +2,7 @@
     "port": 8080,
     "disableSSL": true,
     "tokenTimeout": 5,
+    "debugMode": false,
     "api": {
         "auth": true
     },

@@ -17,7 +17,7 @@ apiRouterV1.use(function(req, res, next){
 });
 apiRouterV1.use(function(req, res, next){
     //TODO: auth
-    if(config.default('api.auth', true)){
+    if( config.default('api.auth', true) && !config.default('debugMode', false)){
         if(typeof req.get('x-auth') != 'undefined'){
             let authData;
             try{

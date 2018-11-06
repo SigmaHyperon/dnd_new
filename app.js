@@ -12,7 +12,7 @@ app.use(`/api`, apiRouter);
 
 var server;
 var type = "";
-if(config.default('disableSSL', false)){
+if(config.default('disableSSL', false) || config.default('debugMode', false)){
     const http = require('http');
     server = http.createServer(app);
     type = "http";
