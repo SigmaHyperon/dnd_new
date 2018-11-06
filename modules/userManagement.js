@@ -20,6 +20,7 @@ module.exports = function(io){
         var session = {
             auth: false,
             user: null,
+            name: null,
             token: null
         };
         socket.on('auth', function(authData){
@@ -37,19 +38,20 @@ module.exports = function(io){
                             var tok = new token();
                             session.auth = true;
                             session.user = user.id;
+                            session.name = user.name;
                             session.token = tok;
                             sessions[session.user] = session;
                             socket.emit("authResponse", {status: 'success', token: tok, userId: user.id});
+                            log.log(`user ${authData.userId} signed on successfully`, ['USMGMT']);
+                            updateUserData(io, sessions);
                         } else {
-                            //TODO: change message
-                            socket.emit("authResponse", {status: 'error', message: 'Invalid password'});
+                            socket.emit("authResponse", {status: 'error', message: 'Invalid credentials'});
                         }
                     }
                 });
             } else {
                 socket.emit("authResponse", {status: 'error', message: 'invalid auth request'});
             }
-            //console.log(sessions);
         });
         socket.on('disconnect', (err) => {
             // TODO: handle disconnect
@@ -59,8 +61,14 @@ module.exports = function(io){
             session.token = null;
             //remove session from active sessions
             sessions.splice(sessions.indexOf(session), 1);
+            updateUserData(io, sessions);
         })
     })
     log.log("socketIO setup done", ['INIT']);
     return sessions;
+}
+
+function updateUserData(socket, data){
+    let leanData = Object.keys(data);
+    socket.emit('userUpdate', leanData);
 }
