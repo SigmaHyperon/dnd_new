@@ -6,3 +6,5 @@ _windows
 codestyles
 .idea
 ssl/*
+config/*
+!config/default.json
