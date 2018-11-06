@@ -23,18 +23,17 @@ function init_conn(){
         });
         return res;
     };
-    conn.request = async function(method, path, data){
+    conn.request = function(method, path, data){
         if(!this.connected || !this.authStatus){
             // TODO: handle error
             return;
         }
         let settings = {
-            headers: {
-                "x-auth": JSON.stringify({user: this.credentials.userId, token: this.credentials.token.secret})
-            },
             method: method,
             data: JSON.stringify(data)
         };
+        if(location.protocol == 'https')
+            settings.headers: {"x-auth": JSON.stringify({user: this.credentials.userId, token: this.credentials.token.secret})};
         let res = new Promise((resolve, reject) => {
             $.ajax(path, settings)
                 .done((data) => {
