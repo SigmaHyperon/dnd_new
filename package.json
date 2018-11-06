@@ -8,9 +8,9 @@
     "url": "git+https://github.com/SigmaHyperon/dnd_new.git"
   },
   "scripts": {
-    "start": "node app.js",
-    "dev": "set NODE_ENV=development&& node app.js",
-    "prod": "set NODE_ENV=production&& node app.js"
+    "start": "export NODE_ENV=&& node app.js",
+    "dev": "export NODE_ENV=development&& node app.js",
+    "prod": "export NODE_ENV=production&& node app.js"
   },
   "author": "",
   "bugs": {
