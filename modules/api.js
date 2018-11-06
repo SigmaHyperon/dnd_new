@@ -52,6 +52,12 @@ apiRouterV1.use(function(req, res, next){
 
 function sendResponse(res){
     return (err, doc) => {
+        let uncleanKeys = Object.keys(doc).filter(v => v.indexOf('_') === 0);
+        for (var key in uncleanKeys) {
+            if (uncleanKeys.hasOwnProperty(key)) {
+                delete doc[uncleanKeys[key]];
+            }
+        }
         if(!err){
             res.json(JSON.stringify(doc));
         } else {
