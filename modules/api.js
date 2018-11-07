@@ -50,13 +50,26 @@ apiRouterV1.use(function(req, res, next){
     }
 });
 
+function cleanDoc(doc){
+    let uncleanKeys = Object.keys(doc).filter(v => v.indexOf('_') === 0);
+    for (var key in uncleanKeys) {
+        if (uncleanKeys.hasOwnProperty(key)) {
+            delete doc[uncleanKeys[key]];
+        }
+    }
+    return doc;
+}
+
 function sendResponse(res){
     return (err, doc) => {
-        let uncleanKeys = Object.keys(doc).filter(v => v.indexOf('_') === 0);
-        for (var key in uncleanKeys) {
-            if (uncleanKeys.hasOwnProperty(key)) {
-                delete doc[uncleanKeys[key]];
+        if(doc.isArray()){
+            for (var index in doc) {
+                if (doc.hasOwnProperty(index)) {
+                    doc[index] = cleanDoc(doc[index]);
+                }
             }
+        } else {
+            doc = cleanDoc(doc);
         }
         if(!err){
             res.json(JSON.stringify(doc));
@@ -66,6 +79,7 @@ function sendResponse(res){
         }
     }
 }
+// GET
 
 apiRouterV1.get(`/inv`, (req, res) => {
     Inventory.find().lean().exec(sendResponse(res));
@@ -133,6 +147,8 @@ function performUpdate(type){
     }
 }
 
+//UPDATE
+
 apiRouterV1.all(`/inv/:id`, performUpdate(Inventory));
 
 apiRouterV1.all(`/item/:id`, performUpdate(Item));
@@ -155,6 +171,8 @@ function createDocument(type){
         newDoc.save(saveErrorHandler(res));
     };
 }
+
+//PUT
 
 apiRouterV1.put(`/inv`, createDocument(Inventory));
 apiRouterV1.put(`/item`, createDocument(Item));
@@ -190,6 +208,8 @@ function deleteErrorHandler(res) {
         }
     };
 }
+
+//DELETE
 
 apiRouterV1.delete(`/inv/:invId`, (req, res) => {
     Inventory.deleteOne({id: req.params.invId}, deleteErrorHandler(res));
