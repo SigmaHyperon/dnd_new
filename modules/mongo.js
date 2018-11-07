@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const log = require('./log.js');
 const config = require('./config-default.js');
-
+mongoose.set('useCreateIndex', true);
 mongoose.connect(config.default('db.url','mongodb://localhost/inv'),{
         useNewUrlParser: true
     }, function(err){
@@ -29,7 +29,7 @@ const ItemSchema = new Schema({
 });
 const UserSchema = new Schema({
     id: String,
-    name: {type: String, required: true},
+    name: {type: String, required: true, unique: true},
     password: String,
     salt: String,
     icon: String
