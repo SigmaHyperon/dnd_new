@@ -123,8 +123,12 @@ function init_conn(){
             settings.data = JSON.stringify(data);
             settings.contentType = 'application/json';
         }
-        if(location.protocol == 'https')
+        if(location.protocol == 'https'){
             settings.headers = {"x-auth": JSON.stringify({user: this.credentials.userId, token: this.credentials.token.secret})};
+        } else {
+            settings.headers = {"x-auth": JSON.stringify({user: this.credentials.userId})};
+        }
+
         return await $.ajax(`/api/v1/${path}`, settings);
     }
     conn.new = function(type){
