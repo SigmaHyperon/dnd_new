@@ -17,14 +17,19 @@ apiRouterV1.use(function(req, res, next){
 });
 apiRouterV1.use(function(req, res, next){
     //TODO: auth
-    if( config.default('api.auth', true) && !config.default('debugMode', false)){
-        if(typeof req.get('x-auth') != 'undefined'){
-            let authData;
-            try{
-                authData = JSON.parse(req.get('x-auth'));
-            } catch(e){
-                res.status(400).send('auth data malformed');
+    if(typeof req.get('x-auth') !== 'undefined'){
+        let authData;
+        try{
+            authData = JSON.parse(req.get('x-auth'));
+            if(typeof authData.user !== 'undefined'){
+                req.user = authData.user;
+            } else {
+                throw 'no user found';
             }
+        } catch(e){
+            res.status(400).send('auth data malformed');
+        }
+        if( config.default('api.auth', true) && !config.default('debugMode', false)){
             let user = tokens[authData.user];
             /**
              * check for:
@@ -43,10 +48,10 @@ apiRouterV1.use(function(req, res, next){
             }
             res.status(403).send('auth failed');
         } else {
-            res.status(400).send('auth required');
+            next();
         }
     } else {
-        next();
+        res.status(400).send('auth required');
     }
 });
 
